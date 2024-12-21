@@ -1,0 +1,100 @@
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    background-image: url('forest.jpeg'); /* Replace with the path to your forest.jpg image */
+    background-size: cover;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #d32f2f;
+    transform: scale(2);
+    transform-origin: center;
+}
+
+h1 {
+    color: #d32f2f;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+#hexInput {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 2px solid #d32f2f;
+    border-radius: 5px;
+}
+
+#output {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #388e3c;
+    min-height: 100px; /* Fix the height of the output div */
+    max-height: 100px; /* Fix the height of the output div */
+    overflow: auto; /* Add scroll if content exceeds the fixed height */
+}
+
+input::placeholder {
+    color: #d32f2f;
+}
+
+@keyframes snowflakes-fall {
+    0% { top: -10%; }
+    100% { top: 100%; }
+}
+
+@keyframes snowflakes-shake {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(80px); }
+}
+
+.snowflake {
+    position: fixed;
+    top: -10%;
+    z-index: 9999;
+    user-select: none;
+    cursor: default;
+    color: #fff;
+    font-size: 2em; /* Double the size of the snowflakes */
+    animation: snowflakes-fall 10s linear infinite, snowflakes-shake 3s ease-in-out infinite;
+}
+
+.snowflake:nth-of-type(odd) {
+    animation-duration: 15s, 5s;
+}
+
+.snowflake:nth-of-type(even) {
+    animation-duration: 20s, 7s;
+}
+
+.output p {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.output p span:first-child {
+    flex: 1;
+    text-align: right;
+    padding-right: 10px;
+    color: #d32f2f; /* Make the labels red */
+}
+
+.output p span:last-child {
+    flex: 2;
+    text-align: left;
+    padding-left: 10px;
+}
