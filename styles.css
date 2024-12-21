@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap'); /* Import a festive font */
+
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Mountains of Christmas', cursive, sans-serif; /* Use the festive font */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,6 +27,7 @@ h1 {
     color: #d32f2f;
     font-size: 2.5em;
     margin-bottom: 20px;
+    margin-top: 10px; /* Reduce the margin above the h1 element */
 }
 
 #hexInput {
@@ -37,9 +40,10 @@ h1 {
 }
 
 #output {
-    margin-top: 20px;
-    font-size: 18px;
+    margin-top: 10px; /* Reduce the margin above the output div */
+    font-size: 25px;
     color: #388e3c;
+    font-weight: bold; /* Make the green output text bold */
     min-height: 100px; /* Fix the height of the output div */
     max-height: 100px; /* Fix the height of the output div */
     overflow: auto; /* Add scroll if content exceeds the fixed height */
@@ -82,7 +86,6 @@ input::placeholder {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 300px;
     margin: 0 auto;
 }
 
@@ -98,3 +101,10 @@ input::placeholder {
     text-align: left;
     padding-left: 10px;
 }
+
+.output .gift-code {
+    font-family: 'VT323', monospace; /* Use the old computer font */
+    color: #6a6868; /* Make the grey darker */
+}
+
+/* Removed the label styles */

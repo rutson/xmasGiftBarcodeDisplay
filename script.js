@@ -25,18 +25,20 @@ function loadCSV() {
 // Call the function to load the CSV when the script is loaded
 loadCSV();
 
+let inputTimeout;
+
 function lookupHex() {
     const hexInput = document.getElementById('hexInput');
-    const hexValue = hexInput.value.toLowerCase();
+    const hexValue = hexInput.value.toUpperCase(); // Ensure the value is uppercase
     const output = document.getElementById('output');
 
     if (hexValue.length === 4) {
-        const result = data[hexValue];
+        const result = data[hexValue.toLowerCase()]; // Use lowercase for lookup
 
         if (result) {
             output.innerHTML = `
                 <div class="output">
-                    <p><span>Gift Code:</span> <span>${hexValue}</span></p>
+                    <p><span>Gift Code:</span> <span class="gift-code">${hexValue}</span></p>
                     <p><span>From:</span> <span>${result.from}</span></p>
                     <p><span>To:</span> <span>${result.to}</span></p>
                 </div>
@@ -50,9 +52,25 @@ function lookupHex() {
     } else {
         output.innerHTML = '';
     }
+
+    // Reset the timeout
+    clearTimeout(inputTimeout);
+    inputTimeout = setTimeout(() => {
+        hexInput.value = '';
+    }, 5000);
+
+    // Ensure focus stays in the input box
+    hexInput.focus();
+}
+
+function restrictHexInput(event) {
+    const hexInput = event.target;
+    hexInput.value = hexInput.value.replace(/[^0-9a-fA-F]/g, '').toUpperCase();
 }
 
 // Focus on the input box when the page loads
 document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('hexInput').focus();
+    const hexInput = document.getElementById('hexInput');
+    hexInput.focus();
+    hexInput.addEventListener('input', restrictHexInput);
 });
