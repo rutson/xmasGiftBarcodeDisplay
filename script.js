@@ -1,11 +1,13 @@
 let data = {};
 
 let encryptedURLs = [
+    // Encrypted URLs
     "PnuiLi/SJGr0K+BvkVvCBUvKKD2dSiq6XNEGfCNbQbIroOfHl1kEe1wH/l5OPvpVaiGkYMJ5KgFSlt62h3ekSG8qUxVCqLDNbmLS7IqH3oZcu7NqjhQei5Kg+TqbUM3AUR5wCSDV8h5pedIV1fDdM6TLpxBZ+y4pjba4iXKwtEBUjLHOvMGgJqMldePV2P9rTEb6duvE2rIfP42epj/ccHie8t2rfjVpSRo/09fYvsg=",
     "pTX9yQv+8qI6ZTkUO0f0i2zibOiH22FHT5Q8ADf5/ZbUyBgclV/NNSnqs9N22yfBxKICnl0bvqS0vC0IrWQW8HUjOQ5F9df4U4zQ7PQlJy4YKT2HKGRKj2MoO7GcyBIeFq21m3KAiJNxdGhv1Fk3NP8TPx1BpTpKClUQh0S2o7igDtJnWF84CJhBScFVc5ascNSng2GfXC4saUFFK4fCuhttjEIgs4P1CuQPvGZ2VQ8="
 ];
 
-function decryptURL( secretKey ) {
+// Function to decrypt the URL using the secret key
+function decryptURL(secretKey) {
     const key = CryptoJS.enc.Utf8.parse(secretKey);
     const iv = CryptoJS.enc.Utf8.parse(secretKey); // Using the same key as IV for simplicity
 
@@ -19,16 +21,14 @@ function decryptURL( secretKey ) {
 
         try {
             return decrypted.toString(CryptoJS.enc.Utf8);
-          } catch (error) {
-            console.log ("not this one!");
-          }
-
+        } catch (error) {
+            console.log("not this one!");
+        }
     }
-    
 }
 
+// Function to load and parse the CSV file from the decrypted URL
 function loadCSV(secretKey) {
-
     const csvUrl = decryptURL(secretKey);
 
     fetch(csvUrl)
@@ -57,6 +57,7 @@ function loadCSV(secretKey) {
 
 let inputTimeout;
 
+// Function to lookup the hex code in the data
 function lookupHex() {
     const hexInput = document.getElementById('hexInput');
     const hexValue = hexInput.value.toUpperCase(); // Ensure the value is uppercase
@@ -93,11 +94,13 @@ function lookupHex() {
     hexInput.focus();
 }
 
+// Function to restrict hex input to valid characters
 function restrictHexInput(event) {
     const hexInput = event.target;
     hexInput.value = hexInput.value.replace(/[^0-9a-fA-F]/g, '').toUpperCase();
 }
 
+// Function to setup the secret key input
 function setupSecretKeyInput() {
     const secretKeyInput = document.getElementById('secretKeyInput');
     secretKeyInput.focus();
@@ -114,6 +117,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('hexInput').style.display = 'none'; // Hide hexInput initially
     setupSecretKeyInput();
     const hexInput = document.getElementById('hexInput');
-    // hexInput.focus();
     hexInput.addEventListener('input', restrictHexInput);
 });
