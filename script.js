@@ -1,8 +1,35 @@
 let data = {};
 
-// Function to load and parse the CSV file from Google Sheets
-function loadCSV() {
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRJc2dvgZh7jYOWDmjoTH2NSt6S1OgATNviAYbvSv09n5KETCSQZqQYOfB1TPU-9HDPl_RI_3PI15zm/pub?gid=0&single=true&output=csv';
+let encryptedURLs = [
+    "PnuiLi/SJGr0K+BvkVvCBUvKKD2dSiq6XNEGfCNbQbIroOfHl1kEe1wH/l5OPvpVaiGkYMJ5KgFSlt62h3ekSG8qUxVCqLDNbmLS7IqH3oZcu7NqjhQei5Kg+TqbUM3AUR5wCSDV8h5pedIV1fDdM6TLpxBZ+y4pjba4iXKwtEBUjLHOvMGgJqMldePV2P9rTEb6duvE2rIfP42epj/ccHie8t2rfjVpSRo/09fYvsg=",
+    "pTX9yQv+8qI6ZTkUO0f0i2zibOiH22FHT5Q8ADf5/ZbUyBgclV/NNSnqs9N22yfBxKICnl0bvqS0vC0IrWQW8HUjOQ5F9df4U4zQ7PQlJy4YKT2HKGRKj2MoO7GcyBIeFq21m3KAiJNxdGhv1Fk3NP8TPx1BpTpKClUQh0S2o7igDtJnWF84CJhBScFVc5ascNSng2GfXC4saUFFK4fCuhttjEIgs4P1CuQPvGZ2VQ8="
+];
+
+function decryptURL( secretKey ) {
+    const key = CryptoJS.enc.Utf8.parse(secretKey);
+    const iv = CryptoJS.enc.Utf8.parse(secretKey); // Using the same key as IV for simplicity
+
+    for (let i = 0; i < encryptedURLs.length; i++) {
+        const encryptedURL = encryptedURLs[i];
+        const decrypted = CryptoJS.AES.decrypt(encryptedURL, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+        try {
+            return decrypted.toString(CryptoJS.enc.Utf8);
+          } catch (error) {
+            console.log ("not this one!");
+          }
+
+    }
+    
+}
+
+function loadCSV(secretKey) {
+
+    const csvUrl = decryptURL(secretKey);
 
     fetch(csvUrl)
         .then(response => response.text())
@@ -16,14 +43,17 @@ function loadCSV() {
                             to: row.To
                         };
                     });
+                    document.getElementById('hexInput').style.display = 'inline-block'; // Show hexInput
+                    document.getElementById('secretKeyInput').style.display = 'none'; // Hide secretKeyInput
+                    document.getElementById('hexInput').focus(); // Focus on hexInput
                 }
             });
         })
-        .catch(error => console.error('Error fetching the CSV:', error));
+        .catch(error => {
+            console.error('Error fetching the CSV:', error);
+            document.getElementById('hexInput').style.display = 'none'; // Hide hexInput on error
+        });
 }
-
-// Call the function to load the CSV when the script is loaded
-loadCSV();
 
 let inputTimeout;
 
@@ -68,9 +98,22 @@ function restrictHexInput(event) {
     hexInput.value = hexInput.value.replace(/[^0-9a-fA-F]/g, '').toUpperCase();
 }
 
+function setupSecretKeyInput() {
+    const secretKeyInput = document.getElementById('secretKeyInput');
+    secretKeyInput.focus();
+    secretKeyInput.addEventListener('input', () => {
+        const secretKey = secretKeyInput.value;
+        if (secretKey.length === 16) {
+            loadCSV(secretKey);
+        }
+    });
+}
+
 // Focus on the input box when the page loads
 document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('hexInput').style.display = 'none'; // Hide hexInput initially
+    setupSecretKeyInput();
     const hexInput = document.getElementById('hexInput');
-    hexInput.focus();
+    // hexInput.focus();
     hexInput.addEventListener('input', restrictHexInput);
 });
